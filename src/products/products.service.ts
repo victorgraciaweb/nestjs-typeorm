@@ -93,21 +93,37 @@ export class ProductsService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    try {
-      const product = await this.productRepository.preload({
-        id: id,
-        ...updateProductDto,
-        images: [],
-      });
 
-      if (!product) {
-        throw new NotFoundException(`Product with id: ${id} not found`);
+    const { images, ...toUpdate } = updateProductDto;
+
+    const product = await this.productRepository.preload({ id, ...toUpdate });
+
+    if (!product) throw new NotFoundException(`Product with id: ${id} not found`);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+
+      if (images) {
+        await queryRunner.manager.delete(ProductImage, { product: { id } });
+
+        product.images = images.map(
+          image => this.productImageRepository.create({ url: image })
+        )
       }
 
-      await this.productRepository.save(product);
-      return product;
+      await queryRunner.manager.save(product);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return this.findOnePlain(id);
 
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
       this.exceptionHandlerService.handleExceptions(error);
     }
   }
@@ -117,6 +133,20 @@ export class ProductsService {
 
     try {
       await this.productRepository.remove(product);
+    } catch (error) {
+      this.exceptionHandlerService.handleExceptions(error);
+    }
+  }
+
+  async deleteAllProducts() {
+    const query = this.productRepository.createQueryBuilder('product');
+
+    try {
+      return await query
+        .delete()
+        .where({})
+        .execute();
+
     } catch (error) {
       this.exceptionHandlerService.handleExceptions(error);
     }
