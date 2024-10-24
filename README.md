@@ -37,12 +37,17 @@ yarn install
 docker compose up -d
 ```
 
-7. Up app in dev (watch mode):
+7. Execute SEED 
+```
+http://localhost:3000/api/seed
+```
+
+8. Up app in dev (watch mode):
 ```
 yarn start:dev
 ```
 
-8. Install Nest CLI (Optional)
+9. Install Nest CLI (Optional)
 ```
 npm i -g @nestjs/cli
 ```

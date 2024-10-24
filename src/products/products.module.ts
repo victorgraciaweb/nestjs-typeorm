@@ -16,5 +16,8 @@ import { Product, ProductImage } from './entities';
     ]),
     CommonModule
   ],
+  exports: [
+    ProductsService,
+    TypeOrmModule],
 })
 export class ProductsModule { }

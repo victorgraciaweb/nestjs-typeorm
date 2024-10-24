@@ -1,7 +1,7 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductImage } from './';
 
-@Entity()
+@Entity({ name: 'products' })
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -45,7 +45,7 @@ export class Product {
         default: []
     })
     tags: string[];
-    
+
     @OneToMany(
         () => ProductImage,
         (productImage) => productImage.product,
