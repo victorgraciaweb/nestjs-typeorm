@@ -1,11 +1,9 @@
 export const EnvConfiguration = () => ({
-    globalPrefix: process.env.GLOBAL_PREFIX,
-    corsEnabled: process.env.CORS_ENABLED,
-    port: process.env.PORT,
-    titleSwagger: process.env.TITLE_SWAGGER,
-    descriptionSwagger: process.env.DESCRIPTION_SWAGGER,
-    versionSwagger: process.env.VERSION_SWAGGER,
-    mongodb: process.env.MONGODB,
-    urlBizaway: process.env.URL_BIZAWAY,
-    apiKeyBizaway: process.env.API_KEY_BIZAWAY
+    dbPassword: process.env.DB_PASSWORD,
+    dbName: process.env.DB_NAME,
+    dbHost: process.env.DB_HOST,
+    dbPort: process.env.DB_PORT,
+    dbUsername: process.env.DB_USERNAME,
+    port: process.env.PORT || 3000,
+    hostApi: process.env.HOST_API,
 });
