@@ -35,8 +35,8 @@ export class User {
         ( product ) => product.user
     )
     product: Product;
-
-
+    */
+   
     @BeforeInsert()
     checkFieldsBeforeInsert() {
         this.email = this.email.toLowerCase().trim();
@@ -45,5 +45,5 @@ export class User {
     @BeforeUpdate()
     checkFieldsBeforeUpdate() {
         this.checkFieldsBeforeInsert();   
-    }*/
+    }
 }

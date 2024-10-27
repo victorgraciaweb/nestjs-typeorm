@@ -8,6 +8,8 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ExceptionHandlerService } from 'src/common/services/exception-handler.service';
 import { LoginUserDto } from './dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +17,8 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly exceptionHandlerService: ExceptionHandlerService
-    //private readonly jwtService: JwtService,
+    private readonly exceptionHandlerService: ExceptionHandlerService,
+    private readonly jwtService: JwtService,
   ) { }
 
   async create(createUserDto: CreateUserDto) {
@@ -32,33 +34,38 @@ export class AuthService {
       await this.userRepository.save(user)
       delete user.password;
 
-      return user;
+      return {
+        ...user,
+        token: this.getJwtToken({ id: user.id })
+      };
 
     } catch (error) {
       this.exceptionHandlerService.handleExceptions(error);
     }
   }
 
-  async login( loginUserDto: LoginUserDto ) {
+  async login(loginUserDto: LoginUserDto) {
 
     const { password, email } = loginUserDto;
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true, id: true } //! OJO!
+      select: { email: true, password: true, id: true }
     });
 
-    if ( !user ) 
+    if (!user)
       throw new UnauthorizedException('Credentials are not valid (email)');
-      
-    if ( !bcrypt.compareSync( password, user.password ) )
+
+    if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException('Credentials are not valid (password)');
 
-    /*return {
+    return {
       ...user,
       token: this.getJwtToken({ id: user.id })
-    };*/
+    };
+  }
 
-    return user;
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 }
