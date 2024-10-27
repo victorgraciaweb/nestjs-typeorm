@@ -4,6 +4,7 @@ import { join } from 'path';
 
 @Injectable()
 export class FilesService {
+
     getStaticProductImage(imageName: string) {
 
         const path = join(__dirname, '../../static/products', imageName);
