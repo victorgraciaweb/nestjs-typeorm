@@ -2,10 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto/';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorators/get-user.decorator';
+import { User } from './entities/user.entity';
+import { RawHeaders } from './decorators/raw-headers.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
   createUser(@Body() createUserDto: CreateUserDto) {
@@ -19,7 +22,16 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivateRoute() {
-    return true;
+  testingPrivateRoute(
+    @GetUser() user: User,
+    @RawHeaders() rawHeaders: string[],
+  ) {
+
+    return {
+      ok: true,
+      message: 'Hola Mundo Private',
+      user,
+      rawHeaders
+    }
   }
 }
