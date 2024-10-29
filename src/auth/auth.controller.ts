@@ -21,16 +21,4 @@ export class AuthController {
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
-
-  @Get('private3')
-  @Auth(ValidRoles.user)
-  privateRoute3(
-    @GetUser() user: User
-  ) {
-
-    return {
-      ok: true,
-      user
-    }
-  }
 }

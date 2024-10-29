@@ -28,7 +28,8 @@ export class ProductsService {
 
       const product = this.productRepository.create({
         ...productDetails,
-        images: images.map(image => this.productImageRepository.create({ url: image }))
+        images: images.map(image => this.productImageRepository.create({ url: image })),
+        user
       });
 
       await this.productRepository.save(product);
