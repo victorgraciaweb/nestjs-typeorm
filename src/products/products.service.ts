@@ -7,6 +7,7 @@ import { CreateProductDto, UpdateProductDto } from './dto';
 import { Product, ProductImage } from './entities';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { ExceptionHandlerService } from 'src/common/services/exception-handler.service';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -21,7 +22,7 @@ export class ProductsService {
     private readonly exceptionHandlerService: ExceptionHandlerService
   ) { }
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { images = [], ...productDetails } = createProductDto;
 
@@ -92,7 +93,7 @@ export class ProductsService {
     }
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
 
     const { images, ...toUpdate } = updateProductDto;
 
@@ -114,6 +115,7 @@ export class ProductsService {
         )
       }
 
+      product.user = user;
       await queryRunner.manager.save(product);
 
       await queryRunner.commitTransaction();
