@@ -10,10 +10,7 @@ export class SeedController {
   constructor(private readonly seedService: SeedService) { }
 
   @Get()
-  @Auth(ValidRoles.admin)
-  executeSeed(
-    @GetUser() user: User
-  ) {
+  executeSeed() {
     return this.seedService.runSeed();
   }
 }
