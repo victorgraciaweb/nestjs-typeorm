@@ -7,7 +7,9 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { ValidRoles } from 'src/auth/interfaces';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
