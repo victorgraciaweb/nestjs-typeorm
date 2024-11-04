@@ -7,10 +7,14 @@ export class MessageWsGateway implements OnGatewayConnection, OnGatewayDisconnec
   constructor(private readonly messageWsService: MessageWsService) {}
 
   handleConnection(client: Socket) {
-    console.log('Client connected: ',client.id);
+    this.messageWsService.registerClient(client);
+
+    console.log({Conectados: this.messageWsService.getConnectedClients()});
   }
   
   handleDisconnect(client: Socket) {
-    console.log('Client disconnected: ',client.id);
+    this.messageWsService.removeClient(client.id);
+
+    console.log({Conectados: this.messageWsService.getConnectedClients()});
   }
 }
