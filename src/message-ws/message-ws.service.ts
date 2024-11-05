@@ -17,4 +17,9 @@ export class MessageWsService {
     getConnectedClients(): string[] {
         return Object.keys(this.connectedClients);
     }
+
+    getUserFullName( userId: string ) {
+        return this.connectedClients[userId].id;
+        //return this.connectedClients[userId].fullName;
+    }
 }
