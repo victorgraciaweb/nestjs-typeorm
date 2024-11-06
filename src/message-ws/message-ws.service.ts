@@ -37,7 +37,6 @@ export class MessageWsService {
     }
 
     getUserFullName(userId: string) {
-        return this.connectedClients[userId];
-        //return this.connectedClients[userId].fullName;
+        return this.connectedClients[userId].user.fullName;
     }
 }
