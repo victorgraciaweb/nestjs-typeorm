@@ -15,12 +15,18 @@ import { MessageWsModule } from './message-ws/message-ws.module';
       load: [EnvConfiguration]
     }),
     TypeOrmModule.forRoot({
+      ssl: process.env.STAGE === 'prod',
+      extra: {
+        ssl: process.env.STAGE === 'prod'
+          ? { rejectUnauthorized: false }
+          : null,
+      },
       type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,      
+      password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -34,4 +40,4 @@ import { MessageWsModule } from './message-ws/message-ws.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
